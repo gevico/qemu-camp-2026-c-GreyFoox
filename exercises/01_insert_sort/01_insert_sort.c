@@ -9,12 +9,13 @@ typedef struct {
 
 void insertion_sort(Student students[], int n) {
     for(int i = 1; i < n; i++) {
+        Student temp = students[i];
         int j = i - 1;
-        while(j >= 0 && (students[j].score > students[i].score)) {
+        while(j >= 0 && (students[j].score > temp.score)) {
             students[j + 1] = students[j];
             j--;
         }
-        students[j + 1] = students[i];
+        students[j + 1] = temp;
     }
 }
 
