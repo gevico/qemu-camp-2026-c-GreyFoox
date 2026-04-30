@@ -12,9 +12,18 @@ typedef struct {
 
 Student students[MAX_STUDENTS];
 
+int cmp(const void* a, const void* b) {
+    Student s1 = *(const Student*)a;
+    Student s2 = *(const Student*)b;
+    
+    if (s1.score < s2.score) return 1;
+    if (s1.score > s2.score) return -1;
+    return 0;
+}
 void quick_sort(int left, int right) {
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    int size = sizeof students / sizeof *students;
+
+    qsort(students, size, sizeof(Student), cmp);
 }
 
 int main(void) {
