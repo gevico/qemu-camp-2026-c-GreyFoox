@@ -12,9 +12,9 @@ int maze[MAX_ROW][MAX_COL] = {
     0, 0, 0, 1, 0,
 };
 
-// 方向: 上, 下, 左, 右
-int dir_row[] = {-1, 1, 0, 0};
-int dir_col[] = {0, 0, -1, 1};
+// 方向: 下, 右, 左, 上 (push顺序决定了DFS探索优先级)
+int dir_row[] = {1, 0, 0, -1};
+int dir_col[] = {0, 1, -1, 0};
 
 typedef struct {
     int row;

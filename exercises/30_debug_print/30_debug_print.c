@@ -2,45 +2,45 @@
 #include <stdlib.h>
 #include <execinfo.h>
 
-#ifdef TODO
+#define DEBUG_LEVEL 2
 
-#define DEBUG_PRINT(fmt, ...) 
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
-
-#else
-
-#define DEBUG_PRINT(fmt, ...) do {} while (0)
-
-#endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#define DEBUG_PRINT(fmt, ...) \
+    do { \
+        if (DEBUG_LEVEL >= 2) { \
+            printf("DEBUG: func=%s, line=%d, " fmt "\n", __func__, __LINE__, ##__VA_ARGS__); \
+        } else if (DEBUG_LEVEL >= 1) { \
+            printf("DEBUG: " fmt "\n", ##__VA_ARGS__); \
+        } \
+    } while (0)
 
 //! MUST BE ENSURE THE DEBUG_PRINT("x=%d", x) AT THE 48 LINE
+
+// padding
+// padding
+// padding
+// padding
+// padding
+// padding
+// padding
+// padding
+// padding
+// padding
+// padding
+// padding
+// padding
+// padding
+// padding
+// padding
+// padding
+// padding
+// padding
+// padding
+// padding
+// padding
+// padding
+// padding
+// padding
+// padding
 
 // 测试代码
 void test() {
