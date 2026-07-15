@@ -42,8 +42,18 @@ int main() {
     }
 
     // 使用 strtok 按空格分割单词
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    const char *delim = " ";
+    char *token = strtok(line, delim);
+    while (token != NULL) {
+        to_lowercase(token);
+        const char *translation = hash_table_lookup(table, token);
+        if (translation != NULL) {
+            printf("%s: %s\n", token, translation);
+        } else {
+            printf("%s: <未找到翻译>\n", token);
+        }
+        token = strtok(NULL, delim);
+    }
   }
 
   free_hash_table(table);
