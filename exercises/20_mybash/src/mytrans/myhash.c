@@ -56,10 +56,35 @@ int hash_table_insert(HashTable *table, const char *key, const char *value) {
   unsigned long hash = hash_function(key) % HASH_TABLE_SIZE;
   HashNode *node = table->buckets[hash];
 
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    // 遍历链表查找是否已有相同 key
+    while (node) {
+        if (strcmp(node->key, key) == 0) {
+            // 已存在，更新 value
+            free(node->value);
+            node->value = strdup(value);
+            if (!node->value) return 0;
+            return 1;
+        }
+        node = node->next;
+    }
 
-  return 1;
+    // 不存在，创建新节点（头插法）
+    HashNode *new_node = (HashNode*)malloc(sizeof(HashNode));
+    if (!new_node) return 0;
+
+    new_node->key = strdup(key);
+    new_node->value = strdup(value);
+    if (!new_node->key || !new_node->value) {
+        free(new_node->key);
+        free(new_node->value);
+        free(new_node);
+        return 0;
+    }
+
+    new_node->next = table->buckets[hash];
+    table->buckets[hash] = new_node;
+
+    return 1;
 }
 
 // 查找键
@@ -70,8 +95,13 @@ const char *hash_table_lookup(HashTable *table, const char *key) {
   unsigned long hash = hash_function(key) % HASH_TABLE_SIZE;
   HashNode *node = table->buckets[hash];
 
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    // 遍历链表查找 key
+    while (node) {
+        if (strcmp(node->key, key) == 0) {
+            return node->value;
+        }
+        node = node->next;
+    }
 
-  return NULL; // 未找到
+    return NULL; // 未找到
 }

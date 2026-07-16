@@ -7,8 +7,35 @@
 #include <string.h>
 
 void trim(char *str) {
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    if (!str || *str == '\0') {
+        return;
+    }
+
+    char *start = str;
+    char *end;
+
+    // 去掉开头的空白字符
+    while (isspace((unsigned char)*start)) {
+        start++;
+    }
+
+    // 如果全是空白字符
+    if (*start == '\0') {
+        *str = '\0';
+        return;
+    }
+
+    // 去掉末尾的空白字符
+    end = start + strlen(start) - 1;
+    while (end > start && isspace((unsigned char)*end)) {
+        end--;
+    }
+
+    // 将 trimmed 字符串移回原 str 头部
+    *(end + 1) = '\0';
+    if (start != str) {
+        memmove(str, start, end - start + 2);
+    }
 }
 
 int load_dictionary(const char *filename, HashTable *table,
@@ -24,10 +51,45 @@ int load_dictionary(const char *filename, HashTable *table,
   char current_translation[1024] = {0};
   int in_entry = 0;
 
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    while (fgets(line, sizeof(line), file)) {
+        // 去掉换行符
+        line[strcspn(line, "\n")] = '\0';
 
-  fclose(file);
+        if (line[0] == '\0') {
+            continue;  // 跳过空行
+        }
+
+        if (line[0] == '#') {
+            // 这是一个单词条目
+            if (in_entry && current_word[0] != '\0' && current_translation[0] != '\0') {
+                // 保存上一个条目的翻译
+                hash_table_insert(table, current_word, current_translation);
+                (*dict_count)++;
+            }
+
+            // 提取单词（跳过 '#'）
+            strncpy(current_word, line + 1, sizeof(current_word) - 1);
+            current_word[sizeof(current_word) - 1] = '\0';
+
+            // 重置翻译缓冲区
+            current_translation[0] = '\0';
+            in_entry = 1;
+        } else if (in_entry && strncmp(line, "Trans:", 6) == 0) {
+            // 这是一个翻译行
+            const char *trans_text = line + 6;  // 跳过 "Trans:"
+            trim((char*)trans_text);
+            strncpy(current_translation, trans_text, sizeof(current_translation) - 1);
+            current_translation[sizeof(current_translation) - 1] = '\0';
+        }
+    }
+
+    // 保存最后一个条目
+    if (in_entry && current_word[0] != '\0' && current_translation[0] != '\0') {
+        hash_table_insert(table, current_word, current_translation);
+        (*dict_count)++;
+    }
+
+    fclose(file);
   return 0;
 }
 
