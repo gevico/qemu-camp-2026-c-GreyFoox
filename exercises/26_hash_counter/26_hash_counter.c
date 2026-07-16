@@ -3,6 +3,16 @@
 #include <string.h>
 #include <ctype.h>
 
+// 手动实现 strdup（兼容 -std=c11 编译模式）
+static char *my_strdup(const char *s) {
+    size_t len = strlen(s) + 1;
+    char *dup = malloc(len);
+    if (dup) {
+        memcpy(dup, s, len);
+    }
+    return dup;
+}
+
 #define TABLE_SIZE 1024  // 哈希表大小
 
 // 哈希表节点结构
@@ -50,7 +60,7 @@ void hash_table_insert(HashTable *ht, const char *word) {
     }
 
     HashNode *new_node = malloc(sizeof(HashNode));
-    new_node->word = strdup(word);
+    new_node->word = my_strdup(word);
     new_node->count = 1;
     new_node->next = ht->table[hash];
     ht->table[hash] = new_node;
